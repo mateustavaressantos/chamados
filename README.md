@@ -8,13 +8,24 @@ Esta é uma API RESTful desenvolvida em Java com Spring Boot para o gerenciament
 
 ### 🚀 Tecnologias e Padrões Utilizados
 
-* **Java 21+**
+- **Java 21+**
+- **Spring Boot 4.1+** (Web, Data JPA, Validation)
+- **H2 Database** (Banco de dados em memória para testes)
+- **JUnit 5 & Mockito** (Testes Automatizados)
+- **Maven** (Gerenciamento de dependências)
 
-* **Spring Boot** (Web, Data JPA, Validation)
+### 🛡️ Testes Automatizados
 
-* **H2 Database** (Banco de dados em memória para testes)
+O projeto conta com uma suíte de testes automatizados implementada para garantir a estabilidade e a qualidade do código em diferentes camadas da arquitetura:
 
-* **Maven** (Gerenciamento de dependências)
+- **Testes de Controller (WebMvcTest):** Validação isolada de endpoints REST, garantindo os retornos HTTP corretos (201 Created, 400 Bad Request, 404 Not Found, 409 Conflict) utilizando o novo padrão `@MockitoBean`.
+- **Testes de Repository (DataJpaTest):** Validação das consultas personalizadas ao banco de dados utilizando um banco H2 em memória exclusivo para testes.
+- **Testes de Service:** Validação unitária pura das regras de negócio (como o bloqueio de duplicidade de e-mails e manipulação de chamados fechados) utilizando Mockito.
+
+Para rodar a suíte completa de testes, execute no terminal:
+```bash
+.\mvnw test
+```
 
 ### 🚦 Como Executar o Projeto
 
@@ -147,13 +158,24 @@ This is a RESTful API developed in Java with Spring Boot for Support Ticket Mana
 
 ### 🚀 Technologies and Practices
 
-* **Java 21+**
+- **Java 21+**
+- **Spring Boot 4.1+** (Web, Data JPA, Validation)
+- **H2 Database** (In-memory database for testing)
+- **JUnit 5 & Mockito** (Automated Testing)
+- **Maven** (Dependency Manager)
 
-* **Spring Boot** (Web, Data JPA, Validation)
+### 🛡️ Automated Tests
 
-* **H2 Database** (In-memory database for testing)
+The project features a comprehensive suite of automated tests implemented to ensure code stability and quality across different architecture layers:
 
-* **Maven** (Dependency Manager)
+- **Controller Tests (WebMvcTest):** Isolated validation of REST endpoints, ensuring correct HTTP responses (201 Created, 400 Bad Request, 404 Not Found, 409 Conflict) using the new `@MockitoBean` standard.
+- **Repository Tests (DataJpaTest):** Validation of custom database queries using a dedicated in-memory H2 database.
+- **Service Tests:** Pure unit validation of business rules (such as preventing duplicate emails and handling closed tickets) using Mockito.
+
+To run the complete test suite, execute in the terminal:
+```bash
+.\mvnw test
+```
 
 ### 🚦 How to Run the Project
 
