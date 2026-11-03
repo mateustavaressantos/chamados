@@ -20,7 +20,7 @@ import br.com.sistemas.chamados.dto.ClienteResponse;
 import br.com.sistemas.chamados.exception.RecursoNaoEncontradoException;
 import br.com.sistemas.chamados.exception.RegraNegocioException;
 import br.com.sistemas.chamados.service.ClienteService;
-import br.com.sistemas.chamados.service.ChamadoService; // <-- IMPORT NOVO AQUI
+import br.com.sistemas.chamados.service.ChamadoService;
 
 @WebMvcTest(ClienteController.class)
 class ClienteControllerTest {
@@ -32,7 +32,7 @@ class ClienteControllerTest {
     private ClienteService service;
 
     @MockitoBean
-    private ChamadoService chamadoService; // <-- AVISAMOS O SPRING SOBRE O CHAMADO SERVICE AQUI
+    private ChamadoService chamadoService;
 
     @Test
     @DisplayName("Deve retornar 201 Created ao criar cliente com dados válidos")
