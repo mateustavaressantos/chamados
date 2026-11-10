@@ -1,7 +1,9 @@
 package br.com.sistemas.chamados.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,7 +47,8 @@ class ClienteControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"nome\":\"Mateus\",\"email\":\"mateus@gmail.com\",\"telefone\":\"47999999999\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.telefone").value("47999999999"));
     }
 
     @Test
@@ -77,5 +80,15 @@ class ClienteControllerTest {
 
         mockMvc.perform(get("/clientes/99"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 409 Conflict ao excluir cliente que possui chamados")
+    void deveRetornar409AoExcluirClienteComChamados() throws Exception {
+        doThrow(new RegraNegocioException("Não é possível excluir: este cliente possui chamados."))
+                .when(service).excluir(1L);
+
+        mockMvc.perform(delete("/clientes/1"))
+                .andExpect(status().isConflict());
     }
 }

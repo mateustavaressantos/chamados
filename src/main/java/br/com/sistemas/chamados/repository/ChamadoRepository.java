@@ -12,7 +12,6 @@ import br.com.sistemas.chamados.entity.StatusChamado;
 
 public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
 
-    // Filtros combinados opcionais e paginação para a rota /chamados
     @Query("SELECT c FROM Chamado c WHERE " +
            "(:status IS NULL OR c.status = :status) AND " +
            "(:prioridade IS NULL OR c.prioridade = :prioridade) AND " +
@@ -23,6 +22,11 @@ public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
             @Param("clienteId") Long clienteId,
             Pageable pageable);
 
-    // Busca os chamados de um cliente específico para a rota /clientes/{id}/chamados
     Page<Chamado> findByClienteId(Long clienteId, Pageable pageable);
+
+    boolean existsByClienteId(Long clienteId);
+
+    boolean existsByCategoriaId(Long categoriaId);
+
+    boolean existsByTecnicoId(Long tecnicoId);
 }

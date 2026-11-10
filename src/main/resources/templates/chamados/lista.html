@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Chamados')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('chamados')}"></aside>
+
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <h1>Chamados</h1>
+                <p class="subtitle">Filtre por status, prioridade ou cliente</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/web/chamados/novo}">Novo chamado</a>
+        </header>
+
+        <form class="card filters" method="get" th:action="@{/web/chamados}">
+            <div class="field">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="">Todos</option>
+                    <option th:each="s : ${statusValores}"
+                            th:value="${s}" th:text="${s}"
+                            th:selected="${s.name() == statusSel}"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="prioridade">Prioridade</label>
+                <select id="prioridade" name="prioridade">
+                    <option value="">Todas</option>
+                    <option th:each="p : ${prioridadeValores}"
+                            th:value="${p}" th:text="${p}"
+                            th:selected="${p.name() == prioridadeSel}"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="clienteId">Cliente</label>
+                <select id="clienteId" name="clienteId">
+                    <option value="">Todos</option>
+                    <option th:each="c : ${clientes}"
+                            th:value="${c.id}" th:text="${c.nome}"
+                            th:selected="${c.id == clienteSel}"></option>
+                </select>
+            </div>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <a class="btn" th:href="@{/web/chamados}">Limpar</a>
+            </div>
+        </form>
+
+        <section class="card empty" th:if="${pagina.empty}">
+            <h2>Nenhum chamado encontrado</h2>
+            <p>Não há chamados para os filtros selecionados. Ajuste os filtros ou limpe a busca.</p>
+            <a class="btn" th:href="@{/web/chamados}">Limpar filtros</a>
+        </section>
+
+        <section class="card table-card" th:unless="${pagina.empty}">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título</th>
+                        <th>Cliente</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Técnico</th>
+                        <th>Abertura</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${pagina.content}">
+                        <td th:text="${c.id}">1</td>
+                        <td><a class="link" th:href="@{/web/chamados/{id}(id=${c.id})}" th:text="${c.titulo}">Título</a></td>
+                        <td th:text="${c.nomeCliente}">Cliente</td>
+                        <td th:text="${c.prioridade}">MEDIA</td>
+                        <td><span class="badge" th:classappend="'badge-' + ${c.status}" th:text="${c.status}">ABERTO</span></td>
+                        <td th:text="${c.nomeTecnico} ?: 'Não atribuído'">Técnico</td>
+                        <td th:text="${#temporals.format(c.dataAbertura, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-bar">
+                <span class="muted"
+                      th:text="'Exibindo ' + ${pagina.number * pagina.size + 1} + '–' + ${pagina.number * pagina.size + pagina.numberOfElements} + ' de ' + ${pagina.totalElements} + ' resultados'">
+                    Exibindo 1–5 de 8 resultados
+                </span>
+                <nav class="pagination" aria-label="Paginação">
+                    <a class="page-link" th:classappend="${pagina.hasPrevious()} ? '' : 'disabled'"
+                       th:href="@{/web/chamados(page=${pagina.number - 1}, size=${pagina.size}, status=${statusSel}, prioridade=${prioridadeSel}, clienteId=${clienteParam})}">Anterior</a>
+
+                    <a class="page-link" th:each="n : ${#numbers.sequence(0, pagina.totalPages - 1)}"
+                       th:classappend="${n == pagina.number} ? 'current'"
+                       th:href="@{/web/chamados(page=${n}, size=${pagina.size}, status=${statusSel}, prioridade=${prioridadeSel}, clienteId=${clienteParam})}"
+                       th:text="${n + 1}">1</a>
+
+                    <a class="page-link" th:classappend="${pagina.hasNext()} ? '' : 'disabled'"
+                       th:href="@{/web/chamados(page=${pagina.number + 1}, size=${pagina.size}, status=${statusSel}, prioridade=${prioridadeSel}, clienteId=${clienteParam})}">Próxima</a>
+                </nav>
+            </div>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

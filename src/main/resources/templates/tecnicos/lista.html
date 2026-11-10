@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Técnicos')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('tecnicos')}"></aside>
+
+    <main class="content">
+
+        <header>
+            <h1 style="margin:0;font-size:26px;font-weight:700;">Técnicos</h1>
+            <p class="subtitle">Usuários que atendem chamados, com perfil ADMIN ou TECNICO</p>
+        </header>
+
+        <div class="alert alert-success" role="status" th:if="${sucesso}" th:text="${sucesso}">Mensagem de sucesso</div>
+        <div class="alert alert-error" role="alert" th:if="${erro}" th:text="${erro}">Mensagem de erro</div>
+
+        <div class="two-col">
+
+            <section class="card table-card two-col-main">
+                <p class="muted" style="padding:24px;margin:0;" th:if="${tecnicos.isEmpty()}">Nenhum técnico cadastrado.</p>
+                <div class="table-scroll" th:unless="${tecnicos.isEmpty()}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Perfil</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="t : ${tecnicos}">
+                            <td><strong th:text="${t.nome}">Nome</strong></td>
+                            <td th:text="${t.email}">email@exemplo.com</td>
+                            <td><span class="badge" th:classappend="'badge-' + ${t.perfil}" th:text="${t.perfil}">TECNICO</span></td>
+                            <td class="row-actions">
+                                <a class="link" th:href="@{/web/tecnicos/{id}/editar(id=${t.id})}">Editar</a>
+                                &nbsp;·&nbsp;
+                                <a class="link-danger" th:href="@{/web/tecnicos/{id}/excluir(id=${t.id})}">Excluir</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <form class="card panel form-stack two-col-side" method="post" th:action="@{${formAcao}}">
+                <h2 style="margin:0;" th:text="${formTitulo}">Novo técnico</h2>
+
+                <div class="alert alert-error" role="alert" th:if="${erros != null and !erros.isEmpty()}">
+                    <ul>
+                        <li th:each="e : ${erros}" th:text="${e}">Mensagem de erro</li>
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label for="nome">Nome</label>
+                    <input id="nome" name="nome" type="text" maxlength="100" th:value="${form?.nome()}">
+                </div>
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="text" th:value="${form?.email()}">
+                    <span class="field-hint">O e-mail deve ser único</span>
+                </div>
+                <div class="field">
+                    <label for="perfil">Perfil</label>
+                    <select id="perfil" name="perfil">
+                        <option th:each="p : ${perfis}"
+                                th:value="${p}" th:text="${p}"
+                                th:selected="${form == null ? p.name() == 'TECNICO' : (form.perfil() != null and form.perfil().name() == p.name())}"></option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary" th:text="${editando} ? 'Salvar alterações' : 'Salvar'">Salvar</button>
+                    <a class="btn" th:href="@{/web/tecnicos}">Cancelar</a>
+                </div>
+            </form>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

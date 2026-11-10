@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Novo chamado')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('chamados')}"></aside>
+
+    <main class="content">
+
+        <header>
+            <div class="breadcrumb">
+                <a th:href="@{/web/chamados}">Chamados</a> / Novo
+            </div>
+            <h1 style="margin:6px 0 0;font-size:26px;font-weight:700;">Novo chamado</h1>
+        </header>
+
+        <div class="two-col">
+
+            <form class="card panel form-stack form-narrow two-col-main" method="post" th:action="@{/web/chamados}">
+
+                <div class="alert alert-error" role="alert" th:if="${erros != null and !erros.isEmpty()}">
+                    <ul>
+                        <li th:each="e : ${erros}" th:text="${e}">Mensagem de erro</li>
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label for="titulo">Título</label>
+                    <input id="titulo" name="titulo" type="text" maxlength="150"
+                           th:value="${form?.titulo()}">
+                    <span class="field-hint">Obrigatório · máximo de 150 caracteres</span>
+                </div>
+
+                <div class="field">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="5" maxlength="1000"
+                              th:text="${form?.descricao()}"></textarea>
+                    <span class="field-hint">Obrigatória · máximo de 1000 caracteres</span>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="clienteId">Cliente</label>
+                        <select id="clienteId" name="clienteId">
+                            <option value="">Selecione</option>
+                            <option th:each="c : ${clientes}"
+                                    th:value="${c.id}" th:text="${c.nome}"
+                                    th:selected="${form?.clienteId() != null and form.clienteId() == c.id}"></option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="categoriaId">Categoria</label>
+                        <select id="categoriaId" name="categoriaId">
+                            <option value="">Selecione</option>
+                            <option th:each="c : ${categorias}"
+                                    th:value="${c.id}" th:text="${c.nome}"
+                                    th:selected="${form?.categoriaId() != null and form.categoriaId() == c.id}"></option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="prioridade">Prioridade</label>
+                        <select id="prioridade" name="prioridade">
+                            <option th:each="p : ${prioridadeValores}"
+                                    th:value="${p}" th:text="${p}"
+                                    th:selected="${form == null ? p.name() == 'MEDIA' : (form.prioridade() != null and form.prioridade().name() == p.name())}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Abrir chamado</button>
+                    <a class="btn" th:href="@{/web/chamados}">Cancelar</a>
+                </div>
+            </form>
+
+            <aside class="card panel two-col-side form-stack">
+                <h2 style="margin:0;">Ao abrir o chamado</h2>
+                <p>O chamado nasce com status <span class="badge badge-ABERTO">ABERTO</span> e a data de abertura é preenchida automaticamente.</p>
+                <p>O técnico é atribuído depois, na tela de detalhe.</p>
+            </aside>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

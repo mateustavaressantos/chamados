@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Editar cliente')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
+
+    <main class="content">
+
+        <header>
+            <div class="breadcrumb">
+                <a th:href="@{/web/clientes}">Clientes</a> / Editar
+            </div>
+            <h1 style="margin:6px 0 0;font-size:26px;font-weight:700;">Editar cliente</h1>
+        </header>
+
+        <div class="two-col">
+
+            <form class="card panel form-stack form-narrow two-col-main" method="post"
+                  th:action="@{/web/clientes/{id}/editar(id=${cliente.id})}">
+
+                <div class="alert alert-error" role="alert" th:if="${erros != null and !erros.isEmpty()}">
+                    <ul>
+                        <li th:each="e : ${erros}" th:text="${e}">Mensagem de erro</li>
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label for="nome">Nome</label>
+                    <input id="nome" name="nome" type="text" maxlength="100" th:value="${form?.nome()}">
+                    <span class="field-hint">Obrigatório · máximo de 100 caracteres</span>
+                </div>
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="text" maxlength="120" th:value="${form?.email()}">
+                    <span class="field-hint">Não pode repetir o e-mail de outro cliente</span>
+                </div>
+                <div class="field">
+                    <label for="telefone">Telefone</label>
+                    <input id="telefone" name="telefone" type="text" th:value="${form?.telefone()}">
+                    <span class="field-hint">Máximo de 20 caracteres</span>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                    <a class="btn" th:href="@{/web/clientes}">Cancelar</a>
+                </div>
+            </form>
+
+            <aside class="card panel two-col-side form-stack">
+                <h2 style="margin:0;">Cliente <span th:text="'#' + ${cliente.id}">#1</span></h2>
+                <p th:if="${totalChamados == 0}">Este cliente ainda não tem chamados.</p>
+                <p th:if="${totalChamados > 0}"
+                   th:text="'Este cliente tem ' + ${totalChamados} + (${totalChamados == 1} ? ' chamado registrado.' : ' chamados registrados.')">
+                    Este cliente tem 2 chamados registrados.
+                </p>
+                <a class="link" th:if="${totalChamados > 0}"
+                   th:href="@{/web/clientes/{id}/chamados(id=${cliente.id})}">Ver chamados do cliente</a>
+            </aside>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>
