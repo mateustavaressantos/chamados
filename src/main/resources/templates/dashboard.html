@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('dashboard')}"></aside>
+
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p class="subtitle">Visão geral dos chamados por status e prioridade</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/web/chamados/novo}">Novo chamado</a>
+        </header>
+
+        <section class="kpis">
+            <div class="card kpi" th:each="i : ${porStatus}" th:classappend="'kpi-' + ${i.nome}">
+                <div class="kpi-label" th:text="${i.rotulo}">Aberto</div>
+                <div class="kpi-value" th:text="${i.quantidade}">0</div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <div class="card chart">
+                <h2>Chamados por status</h2>
+                <div class="bars">
+                    <div class="bar-row" th:each="i : ${porStatus}">
+                        <span class="bar-label" th:text="${i.rotulo}">Aberto</span>
+                        <span class="bar-track">
+                            <span class="bar-fill" th:classappend="'bar-fill-' + ${i.nome}"
+                                  th:style="'width:' + ${i.largura} + '%'"></span>
+                        </span>
+                        <span class="bar-value" th:text="${i.quantidade}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card chart">
+                <h2>Chamados por prioridade</h2>
+                <div class="bars">
+                    <div class="bar-row" th:each="i : ${porPrioridade}">
+                        <span class="bar-label" th:text="${i.rotulo}">Baixa</span>
+                        <span class="bar-track">
+                            <span class="bar-fill" th:classappend="'bar-fill-' + ${i.nome}"
+                                  th:style="'width:' + ${i.largura} + '%'"></span>
+                        </span>
+                        <span class="bar-value" th:text="${i.quantidade}">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card table-card">
+            <div class="card-header">
+                <h2>Últimos chamados</h2>
+                <a class="link" th:href="@{/web/chamados}">Ver todos</a>
+            </div>
+            <p class="muted" style="padding:0 24px 24px;margin:0;" th:if="${ultimos.isEmpty()}">Nenhum chamado cadastrado ainda.</p>
+            <div class="table-scroll" th:unless="${ultimos.isEmpty()}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título</th>
+                        <th>Cliente</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${ultimos}">
+                        <td th:text="${c.id}">1</td>
+                        <td><a class="link" th:href="@{/web/chamados/{id}(id=${c.id})}" th:text="${c.titulo}">Título</a></td>
+                        <td th:text="${c.nomeCliente}">Cliente</td>
+                        <td th:text="${c.prioridade}">MEDIA</td>
+                        <td><span class="badge" th:classappend="'badge-' + ${c.status}" th:text="${c.status}">ABERTO</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

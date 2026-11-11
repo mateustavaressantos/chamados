@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalhe do chamado')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('chamados')}"></aside>
+
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <div class="breadcrumb">
+                    <a th:href="@{/web/chamados}">Chamados</a> / #<span th:text="${chamado.id}">1</span>
+                </div>
+                <h1 th:text="${chamado.titulo}">Título do chamado</h1>
+            </div>
+            <div class="badges">
+                <span class="badge" th:classappend="'badge-' + ${chamado.status}" th:text="${chamado.status}">ABERTO</span>
+                <span class="badge" th:text="${chamado.prioridade}">MEDIA</span>
+            </div>
+        </header>
+
+        <div class="alert alert-error" role="alert" th:if="${erro}" th:text="${erro}">Mensagem de erro</div>
+        <div class="alert alert-success" role="status" th:if="${sucesso}" th:text="${sucesso}">Mensagem de sucesso</div>
+        <div class="alert alert-info" role="status" th:if="${fechado}">
+            Este chamado já foi fechado e não pode ser alterado.
+        </div>
+
+        <div class="detail-layout">
+
+            <div class="detail-main">
+
+                <section class="card panel">
+                    <h2>Descrição</h2>
+                    <p th:text="${chamado.descricao}">Descrição do chamado</p>
+                </section>
+
+                <section class="card panel">
+                    <h2>Comentários e histórico</h2>
+
+                    <p class="muted" th:if="${chamado.comentarios == null or chamado.comentarios.isEmpty()}">
+                        Nenhum comentário ainda.
+                    </p>
+
+                    <div class="comments" th:unless="${chamado.comentarios == null or chamado.comentarios.isEmpty()}">
+                        <div class="comment" th:each="c : ${chamado.comentarios}"
+                             th:classappend="${c.autor != 'Sistema'} ? 'comment-human'">
+                            <div class="comment-head">
+                                <strong th:text="${c.autor}">Autor</strong>
+                                <span th:text="${#temporals.format(c.dataHora, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</span>
+                            </div>
+                            <p th:text="${c.texto}">Texto do comentário</p>
+                        </div>
+                    </div>
+
+                    <form class="form-stack form-divider" method="post"
+                          th:action="@{/web/chamados/{id}/comentarios(id=${chamado.id})}"
+                          th:unless="${fechado}">
+                        <h3 style="margin:0;font-size:14px;font-weight:600;">Novo comentário</h3>
+                        <div class="field">
+                            <label for="autor">Autor</label>
+                            <input id="autor" name="autor" type="text" maxlength="100" required>
+                        </div>
+                        <div class="field">
+                            <label for="texto">Texto</label>
+                            <textarea id="texto" name="texto" rows="3" maxlength="1000" required></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Adicionar comentário</button>
+                        </div>
+                    </form>
+
+                    <p class="form-hint form-divider" th:if="${fechado}">
+                        Não é possível adicionar comentários a um chamado fechado.
+                    </p>
+                </section>
+
+            </div>
+
+            <div class="detail-side">
+
+                <section class="card panel">
+                    <h2>Detalhes</h2>
+                    <dl class="details">
+                        <div>
+                            <dt>Cliente</dt>
+                            <dd th:text="${chamado.nomeCliente}">Cliente</dd>
+                        </div>
+                        <div>
+                            <dt>Técnico</dt>
+                            <dd th:text="${chamado.nomeTecnico} ?: 'Não atribuído'">Técnico</dd>
+                        </div>
+                        <div>
+                            <dt>Abertura</dt>
+                            <dd th:text="${#temporals.format(chamado.dataAbertura, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</dd>
+                        </div>
+                        <div>
+                            <dt>Fechamento</dt>
+                            <dd th:text="${chamado.dataFechamento != null} ? ${#temporals.format(chamado.dataFechamento, 'dd/MM/yyyy HH:mm')} : '—'">—</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <form class="card panel form-stack" method="post"
+                      th:action="@{/web/chamados/{id}/atribuir(id=${chamado.id})}">
+                    <h2 style="margin:0;">Atribuir técnico</h2>
+                    <div class="field">
+                        <label for="tecnicoId">Técnico</label>
+                        <select id="tecnicoId" name="tecnicoId" th:disabled="${fechado}">
+                            <option value="" th:if="${chamado.nomeTecnico == null}">Selecione um técnico</option>
+                            <option th:each="t : ${tecnicos}"
+                                    th:value="${t.id}"
+                                    th:text="${t.nome} + ' (' + ${t.perfil} + ')'"
+                                    th:selected="${t.nome == chamado.nomeTecnico}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary" th:disabled="${fechado}">Atribuir</button>
+                    </div>
+                </form>
+
+                <form class="card panel form-stack" method="post"
+                      th:action="@{/web/chamados/{id}/status(id=${chamado.id})}">
+                    <h2 style="margin:0;">Alterar status</h2>
+                    <div class="field">
+                        <label for="status">Novo status</label>
+                        <select id="status" name="status" th:disabled="${fechado}">
+                            <option th:each="s : ${statusValores}"
+                                    th:value="${s}" th:text="${s}"
+                                    th:selected="${s.name() == chamado.status}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary" th:disabled="${fechado}">Atualizar status</button>
+                    </div>
+                    <p class="form-hint">
+                        Ao fechar, a data de fechamento é preenchida e o chamado não aceita mais alterações nem comentários.
+                    </p>
+                </form>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>

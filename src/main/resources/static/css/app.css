@@ -1,0 +1,759 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: #F4F6F8;
+    color: #1B1F27;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #0B5F58;
+    outline-offset: 2px;
+}
+
+
+/*Estrutura da página (menu lateral + conteúdo)*/
+
+.app {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+.sidebar {
+    flex: 1 1 220px;
+    max-width: 248px;
+    padding: 28px 16px;
+    background: #12302D;
+    color: #E4EFEC;
+}
+
+.brand {
+    padding: 0 12px 28px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav a {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.nav a.active {
+    font-weight: 600;
+    background: #1F4A45;
+    color: #fff;
+}
+
+.nav a:focus-visible {
+    outline-color: #fff;
+}
+
+.content {
+    flex: 999 1 560px;
+    min-width: 0;
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+/*Cabeçalho de página*/
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.subtitle {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #5B6472;
+}
+
+
+/*Botões*/
+
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 1px solid #C5CBD3;
+    border-radius: 8px;
+    background: #fff;
+    color: #1B1F27;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #0F766E;
+    border-color: #0F766E;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #B42318;
+    border-color: #B42318;
+    color: #fff;
+}
+
+
+/*Cartões e formulários*/
+
+.card {
+    background: #fff;
+    border: 1px solid #E1E5EA;
+    border-radius: 12px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    padding: 20px;
+}
+
+.field {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.field select,
+.field input,
+.field textarea {
+    padding: 10px 12px;
+    border: 1px solid #C5CBD3;
+    border-radius: 8px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/*Tabelas*/
+
+.table-card {
+    overflow: hidden;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 10px 16px;
+    border-bottom: 1px solid #E1E5EA;
+    background: #F4F6F8;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    color: #5B6472;
+}
+
+td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #EDF0F3;
+    font-size: 14px;
+}
+
+.link {
+    font-weight: 600;
+    color: #0B5F58;
+}
+
+.muted {
+    color: #5B6472;
+}
+
+
+/*Selos de status*/
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #E8EAEE;
+    color: #3B4350;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-ABERTO {
+    background: #E3ECFF;
+    color: #1D3FA8;
+}
+
+.badge-EM_ATENDIMENTO {
+    background: #FFF0D1;
+    color: #7A4B00;
+}
+
+.badge-AGUARDANDO_CLIENTE {
+    background: #EEE5FF;
+    color: #4B2A9C;
+}
+
+.badge-FECHADO {
+    background: #E8EAEE;
+    color: #3B4350;
+}
+
+
+/*Paginação*/
+
+.pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-top: 1px solid #EDF0F3;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.page-link {
+    padding: 8px 14px;
+    border: 1px solid #C5CBD3;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.page-link.current {
+    background: #0F766E;
+    border-color: #0F766E;
+    color: #fff;
+}
+
+.page-link.disabled {
+    color: #8A93A0;
+    pointer-events: none;
+}
+
+
+/*Estado vazio (lista sem resultados)*/
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 64px 24px;
+    text-align: center;
+}
+
+.empty h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.empty p {
+    max-width: 420px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #3B4350;
+}
+
+
+/*Alertas (mensagens de sucesso, erro e aviso)*/
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: #FDE3E1;
+    color: #8A1C14;
+}
+
+.alert-success {
+    background: #DDF3E6;
+    color: #13573A;
+}
+
+.alert-info {
+    background: #E8EAEE;
+    color: #3B4350;
+}
+
+
+/*Detalhe (duas colunas: conteúdo principal + painel lateral)*/
+
+.breadcrumb {
+    font-size: 13px;
+    color: #5B6472;
+}
+
+.breadcrumb a {
+    font-weight: 600;
+    color: #0B5F58;
+}
+
+.breadcrumb + h1 {
+    margin: 6px 0 0;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.detail-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.detail-main {
+    flex: 999 1 440px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.detail-side {
+    flex: 1 1 300px;
+    max-width: 380px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.panel {
+    padding: 24px;
+}
+
+.panel h2 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.panel p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #3B4350;
+}
+
+.details {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.details dt {
+    font-size: 12px;
+    color: #5B6472;
+}
+
+.details dd {
+    margin: 2px 0 0;
+    font-weight: 500;
+}
+
+
+/*Comentários e histórico*/
+
+.comments {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.comment {
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: #F4F6F8;
+}
+
+.comment-human {
+    background: #E6F4F1;
+}
+
+.comment-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: #5B6472;
+}
+
+.comment-head strong {
+    color: #1B1F27;
+}
+
+.panel .comment p {
+    margin-top: 6px;
+    color: #1B1F27;
+}
+
+
+/*Formulários empilhados (comentário, atribuir técnico, alterar status)*/
+
+.form-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-stack .field {
+    flex: none;
+}
+
+.form-divider {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid #EDF0F3;
+}
+
+.form-hint {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5B6472;
+}
+
+.btn:disabled,
+.field select:disabled {
+    background: #EDF0F3;
+    border-color: #DADFE5;
+    color: #5B6472;
+    cursor: not-allowed;
+}
+
+
+/*Página de erro (404)*/
+
+.error-page {
+    flex: 999 1 560px;
+    min-width: 0;
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.error-code {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1;
+    color: #0F766E;
+}
+
+.error-page h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.error-page p {
+    max-width: 420px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #3B4350;
+}
+
+
+/*Páginas com lista + formulário lateral (clientes, categorias, técnicos)*/
+
+.two-col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.two-col-main {
+    flex: 999 1 480px;
+    min-width: 0;
+}
+
+.two-col-side {
+    flex: 1 1 320px;
+    max-width: 400px;
+}
+
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.field-row .field {
+    flex: 1 1 200px;
+}
+
+.field-hint {
+    font-size: 12px;
+    color: #5B6472;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.row-actions {
+    white-space: nowrap;
+}
+
+.link-danger {
+    font-weight: 600;
+    color: #B42318;
+}
+
+.form-narrow {
+    max-width: 760px;
+}
+
+.badge-ADMIN {
+    background: #EEE5FF;
+    color: #4B2A9C;
+}
+
+.badge-TECNICO {
+    background: #E6F4F1;
+    color: #0B5F58;
+}
+
+
+/*Confirmação de exclusão*/
+
+.confirm {
+    max-width: 560px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.confirm h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.confirm .summary {
+    margin: 0;
+    padding: 16px;
+    border-radius: 8px;
+    background: #F4F6F8;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.confirm .summary dt {
+    font-size: 12px;
+    color: #5B6472;
+}
+
+.confirm .summary dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+}
+
+
+/*Dashboard*/
+
+.kpis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.kpi {
+    flex: 1 1 200px;
+    padding: 20px;
+}
+
+.kpi-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #5B6472;
+}
+
+.kpi-value {
+    margin-top: 6px;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.kpi-ABERTO .kpi-value {
+    color: #1D3FA8;
+}
+
+.kpi-EM_ATENDIMENTO .kpi-value {
+    color: #7A4B00;
+}
+
+.kpi-AGUARDANDO_CLIENTE .kpi-value {
+    color: #4B2A9C;
+}
+
+.kpi-FECHADO .kpi-value {
+    color: #3B4350;
+}
+
+.charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.chart {
+    flex: 1 1 340px;
+    padding: 24px;
+}
+
+.chart h2 {
+    margin: 0 0 18px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bar-label {
+    flex: 0 0 140px;
+    font-size: 13px;
+}
+
+.bar-track {
+    flex: 1;
+    height: 12px;
+    border-radius: 6px;
+    background: #EDF0F3;
+}
+
+.bar-fill {
+    display: block;
+    height: 12px;
+    border-radius: 6px;
+    background: #0F766E;
+}
+
+.bar-fill-ABERTO {
+    background: #3B63D9;
+}
+
+.bar-fill-EM_ATENDIMENTO {
+    background: #C77700;
+}
+
+.bar-fill-AGUARDANDO_CLIENTE {
+    background: #7A4FD6;
+}
+
+.bar-fill-FECHADO {
+    background: #6B7482;
+}
+
+.bar-fill-CRITICA {
+    background: #B42318;
+}
+
+.bar-value {
+    flex: 0 0 28px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}

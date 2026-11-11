@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${titulo})}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar(${ativo})}"></aside>
+
+    <main class="content">
+
+        <header>
+            <div class="breadcrumb">
+                <a th:href="@{${voltar}}">Voltar</a> / Excluir
+            </div>
+            <h1 style="margin:6px 0 0;font-size:26px;font-weight:700;" th:text="${titulo}">Excluir</h1>
+        </header>
+
+        <section class="card confirm">
+            <h2 th:text="${pergunta}">Deseja excluir este item?</h2>
+
+            <dl class="summary">
+                <div>
+                    <dt>Nome</dt>
+                    <dd th:text="${nomeItem}">Nome</dd>
+                </div>
+                <div>
+                    <dt th:text="${rotuloDetalhe}">Detalhe</dt>
+                    <dd th:text="${detalheItem}">Valor</dd>
+                </div>
+            </dl>
+
+            <p style="margin:0;font-size:14px;line-height:1.55;color:#3B4350;">
+                O registro será removido do sistema. Esta ação não pode ser desfeita.
+            </p>
+
+            <form class="actions" method="post" th:action="@{${acao}}">
+                <button type="submit" class="btn btn-danger" th:text="${rotuloBotao}">Excluir</button>
+                <a class="btn" th:href="@{${voltar}}">Cancelar</a>
+            </form>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

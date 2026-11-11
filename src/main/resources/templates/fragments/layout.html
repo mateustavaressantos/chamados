@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · Sistema de Chamados'">Sistema de Chamados</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<aside class="sidebar" th:fragment="sidebar(ativo)">
+    <div class="brand">Sistema de Chamados</div>
+    <nav class="nav">
+        <a th:href="@{/}" th:classappend="${ativo == 'dashboard'} ? 'active'">Dashboard</a>
+        <a th:href="@{/web/clientes}" th:classappend="${ativo == 'clientes'} ? 'active'">Clientes</a>
+        <a th:href="@{/web/categorias}" th:classappend="${ativo == 'categorias'} ? 'active'">Categorias</a>
+        <a th:href="@{/web/tecnicos}" th:classappend="${ativo == 'tecnicos'} ? 'active'">Técnicos</a>
+        <a th:href="@{/web/chamados}" th:classappend="${ativo == 'chamados'} ? 'active'">Chamados</a>
+    </nav>
+</aside>
+
+</body>
+</html>

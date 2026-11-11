@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Chamados do cliente')}"></head>
+<body>
+<div class="app">
+
+    <aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
+
+    <main class="content">
+
+        <header class="page-header">
+            <div>
+                <div class="breadcrumb">
+                    <a th:href="@{/web/clientes}">Clientes</a> / <span th:text="${cliente.nome}">Cliente</span> / Chamados
+                </div>
+                <h1 th:text="'Chamados de ' + ${cliente.nome}">Chamados do cliente</h1>
+            </div>
+            <a class="btn btn-primary" th:href="@{/web/chamados/novo}">Novo chamado</a>
+        </header>
+
+        <section class="card empty" th:if="${pagina.empty}">
+            <h2>Nenhum chamado encontrado</h2>
+            <p>Este cliente ainda não tem chamados.</p>
+        </section>
+
+        <section class="card table-card" th:unless="${pagina.empty}">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th>Técnico</th>
+                        <th>Abertura</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${pagina.content}">
+                        <td th:text="${c.id}">1</td>
+                        <td><a class="link" th:href="@{/web/chamados/{id}(id=${c.id})}" th:text="${c.titulo}">Título</a></td>
+                        <td th:text="${c.prioridade}">MEDIA</td>
+                        <td><span class="badge" th:classappend="'badge-' + ${c.status}" th:text="${c.status}">ABERTO</span></td>
+                        <td th:text="${c.nomeTecnico} ?: 'Não atribuído'">Técnico</td>
+                        <td th:text="${#temporals.format(c.dataAbertura, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-bar">
+                <span class="muted"
+                      th:text="'Exibindo ' + ${pagina.number * pagina.size + 1} + '–' + ${pagina.number * pagina.size + pagina.numberOfElements} + ' de ' + ${pagina.totalElements} + ' resultados'">
+                    Exibindo 1–3 de 3 resultados
+                </span>
+                <nav class="pagination" aria-label="Paginação">
+                    <a class="page-link" th:classappend="${pagina.hasPrevious()} ? '' : 'disabled'"
+                       th:href="@{/web/clientes/{id}/chamados(id=${cliente.id}, page=${pagina.number - 1}, size=${pagina.size})}">Anterior</a>
+                    <a class="page-link" th:each="n : ${#numbers.sequence(0, pagina.totalPages - 1)}"
+                       th:classappend="${n == pagina.number} ? 'current'"
+                       th:href="@{/web/clientes/{id}/chamados(id=${cliente.id}, page=${n}, size=${pagina.size})}"
+                       th:text="${n + 1}">1</a>
+                    <a class="page-link" th:classappend="${pagina.hasNext()} ? '' : 'disabled'"
+                       th:href="@{/web/clientes/{id}/chamados(id=${cliente.id}, page=${pagina.number + 1}, size=${pagina.size})}">Próxima</a>
+                </nav>
+            </div>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>
