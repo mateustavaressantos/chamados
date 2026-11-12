@@ -27,22 +27,22 @@
 
                 <div class="field">
                     <label for="titulo">Título</label>
-                    <input id="titulo" name="titulo" type="text" maxlength="150"
+                    <input id="titulo" name="titulo" type="text" required minlength="3" maxlength="150" pattern="[\p{L}\p{N}][\p{L}\p{N} .,&'\(\)\/:;!?#@%+&quot;\-]*" data-erro="O título contém caracteres inválidos."
                            th:value="${form?.titulo()}">
-                    <span class="field-hint">Obrigatório · máximo de 150 caracteres</span>
+                    <span class="field-hint">Obrigatório · de 3 a 150 caracteres</span>
                 </div>
 
                 <div class="field">
                     <label for="descricao">Descrição</label>
-                    <textarea id="descricao" name="descricao" rows="5" maxlength="1000"
+                    <textarea id="descricao" name="descricao" rows="5" required minlength="5" maxlength="1000"
                               th:text="${form?.descricao()}"></textarea>
-                    <span class="field-hint">Obrigatória · máximo de 1000 caracteres</span>
+                    <span class="field-hint">Obrigatória · de 5 a 1000 caracteres · sem os sinais &lt; e &gt;</span>
                 </div>
 
                 <div class="field-row">
                     <div class="field">
                         <label for="clienteId">Cliente</label>
-                        <select id="clienteId" name="clienteId">
+                        <select id="clienteId" name="clienteId" required>
                             <option value="">Selecione</option>
                             <option th:each="c : ${clientes}"
                                     th:value="${c.id}" th:text="${c.nome}"
@@ -51,7 +51,7 @@
                     </div>
                     <div class="field">
                         <label for="categoriaId">Categoria</label>
-                        <select id="categoriaId" name="categoriaId">
+                        <select id="categoriaId" name="categoriaId" required>
                             <option value="">Selecione</option>
                             <option th:each="c : ${categorias}"
                                     th:value="${c.id}" th:text="${c.nome}"

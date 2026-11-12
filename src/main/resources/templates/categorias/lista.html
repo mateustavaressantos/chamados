@@ -55,12 +55,12 @@
 
                 <div class="field">
                     <label for="nome">Nome</label>
-                    <input id="nome" name="nome" type="text" maxlength="100" th:value="${form?.nome()}">
+                    <input id="nome" name="nome" type="text" required minlength="2" maxlength="100" pattern="[\p{L}\p{N}][\p{L}\p{N} .,&'\(\)\/\-]*" data-erro="Use apenas letras, números e pontuação comum." th:value="${form?.nome()}">
                     <span class="field-hint">Obrigatório · máximo de 100 caracteres · sem repetir nome</span>
                 </div>
                 <div class="field">
                     <label for="descricao">Descrição</label>
-                    <textarea id="descricao" name="descricao" rows="4" maxlength="300" th:text="${form?.descricao()}"></textarea>
+                    <textarea id="descricao" name="descricao" rows="4" required minlength="5" maxlength="300" pattern="[^&lt;&gt;]*" data-erro="Não use os sinais &lt; e &gt;." th:text="${form?.descricao()}"></textarea>
                     <span class="field-hint">Obrigatória · máximo de 300 caracteres</span>
                 </div>
                 <div class="actions">

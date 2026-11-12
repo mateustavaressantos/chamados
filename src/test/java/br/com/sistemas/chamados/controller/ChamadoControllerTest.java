@@ -44,7 +44,7 @@ class ChamadoControllerTest {
 
         mockMvc.perform(post("/chamados")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"titulo\":\"Erro\",\"descricao\":\"Erro\",\"prioridade\":\"ALTA\",\"clienteId\":1,\"categoriaId\":1}"))
+                .content("{\"titulo\":\"Erro\",\"descricao\":\"Erro ao abrir\",\"prioridade\":\"ALTA\",\"clienteId\":1,\"categoriaId\":1}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L));
     }

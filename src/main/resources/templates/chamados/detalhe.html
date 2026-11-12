@@ -33,7 +33,7 @@
 
                 <section class="card panel">
                     <h2>Descrição</h2>
-                    <p th:text="${chamado.descricao}">Descrição do chamado</p>
+                    <p class="texto-livre" th:text="${chamado.descricao}">Descrição do chamado</p>
                 </section>
 
                 <section class="card panel">
@@ -60,7 +60,7 @@
                         <h3 style="margin:0;font-size:14px;font-weight:600;">Novo comentário</h3>
                         <div class="field">
                             <label for="autor">Autor</label>
-                            <input id="autor" name="autor" type="text" maxlength="100" required>
+                            <input id="autor" name="autor" type="text" required minlength="2" maxlength="100" pattern="\p{L}[\p{L} .'\-]*" data-erro="Use apenas letras, espaços, ponto, apóstrofo ou hífen." autocomplete="off">
                         </div>
                         <div class="field">
                             <label for="texto">Texto</label>
@@ -107,7 +107,7 @@
                     <h2 style="margin:0;">Atribuir técnico</h2>
                     <div class="field">
                         <label for="tecnicoId">Técnico</label>
-                        <select id="tecnicoId" name="tecnicoId" th:disabled="${fechado}">
+                        <select id="tecnicoId" name="tecnicoId" required th:disabled="${fechado}">
                             <option value="" th:if="${chamado.nomeTecnico == null}">Selecione um técnico</option>
                             <option th:each="t : ${tecnicos}"
                                     th:value="${t.id}"

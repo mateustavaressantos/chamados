@@ -35,7 +35,7 @@
                         <tr th:each="l : ${linhas}">
                             <td><strong th:text="${l.cliente.nome}">Nome</strong></td>
                             <td th:text="${l.cliente.email}">email@exemplo.com</td>
-                            <td th:text="${l.cliente.telefone()}">47999999999</td>
+                            <td data-format="telefone" th:text="${l.cliente.telefone()}">47999999999</td>
                             <td>
                                 <span class="muted" th:if="${l.totalChamados == 0}">Nenhum</span>
                                 <a class="link" th:if="${l.totalChamados > 0}"
@@ -64,16 +64,16 @@
 
                 <div class="field">
                     <label for="nome">Nome</label>
-                    <input id="nome" name="nome" type="text" maxlength="100" th:value="${form?.nome()}">
+                    <input id="nome" name="nome" type="text" required minlength="2" maxlength="100" pattern="[\p{L}\p{N}][\p{L}\p{N} .,&'\(\)\/\-]*" data-erro="Use apenas letras, números e pontuação comum." autocomplete="off" th:value="${form?.nome()}">
                 </div>
                 <div class="field">
                     <label for="email">E-mail</label>
-                    <input id="email" name="email" type="text" maxlength="120" th:value="${form?.email()}">
+                    <input id="email" name="email" type="email" required maxlength="120" pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}" data-erro="Informe um e-mail válido, ex.: nome@empresa.com" autocomplete="off" th:value="${form?.email()}">
                 </div>
                 <div class="field">
                     <label for="telefone">Telefone</label>
-                    <input id="telefone" name="telefone" type="text" th:value="${form?.telefone()}">
-                    <span class="field-hint">Máximo de 20 caracteres</span>
+                    <input id="telefone" name="telefone" type="text" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000" data-mask="telefone" autocomplete="off" th:value="${form?.telefone()}">
+                    <span class="field-hint">Opcional · DDD + número</span>
                 </div>
                 <div class="actions">
                     <button type="submit" class="btn btn-primary">Salvar</button>

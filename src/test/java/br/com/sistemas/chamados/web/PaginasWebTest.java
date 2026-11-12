@@ -168,6 +168,33 @@ class PaginasWebTest {
     }
 
     @Test
+    @DisplayName("Telefone com máscara é aceito e gravado só com dígitos")
+    void clienteComTelefoneMascarado() throws Exception {
+        String email = UUID.randomUUID() + "@teste.com";
+        mockMvc.perform(post("/web/clientes")
+                        .param("nome", "Cliente Mascara")
+                        .param("email", email)
+                        .param("telefone", "(47) 98888-1234"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("sucesso", "Cliente cadastrado."));
+        assertThat(clienteService.listar())
+                .anyMatch(c -> email.equals(c.email()) && "47988881234".equals(c.telefone()));
+    }
+
+    @Test
+    @DisplayName("Telefone inválido e nome com HTML voltam ao formulário com mensagens")
+    void clienteComTelefoneENomeInvalidos() throws Exception {
+        String html = mockMvc.perform(post("/web/clientes")
+                        .param("nome", "<script>alert(1)</script>")
+                        .param("email", UUID.randomUUID() + "@teste.com")
+                        .param("telefone", "123"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        assertThat(html).contains("Nome contém caracteres inválidos", "Telefone inválido");
+        assertThat(html).doesNotContain("<script>alert(1)</script>");
+    }
+
+    @Test
     @DisplayName("E-mail duplicado mostra o erro no formulário (regra de negócio)")
     void clienteComEmailDuplicado() throws Exception {
         String html = mockMvc.perform(post("/web/clientes")

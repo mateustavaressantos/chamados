@@ -72,10 +72,10 @@
                     </thead>
                     <tbody>
                     <tr th:each="c : ${ultimos}">
-                        <td th:text="${c.id}">1</td>
+                        <td class="curta" th:text="${c.id}">1</td>
                         <td><a class="link" th:href="@{/web/chamados/{id}(id=${c.id})}" th:text="${c.titulo}">Título</a></td>
                         <td th:text="${c.nomeCliente}">Cliente</td>
-                        <td th:text="${c.prioridade}">MEDIA</td>
+                        <td class="curta" th:text="${c.prioridade}">MEDIA</td>
                         <td><span class="badge" th:classappend="'badge-' + ${c.status}" th:text="${c.status}">ABERTO</span></td>
                     </tr>
                     </tbody>

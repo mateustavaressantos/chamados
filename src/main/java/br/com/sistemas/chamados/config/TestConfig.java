@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.sistemas.chamados.dto.CategoriaRequest;
+import br.com.sistemas.chamados.dto.ChamadoRequest;
+import br.com.sistemas.chamados.dto.ClienteRequest;
+import br.com.sistemas.chamados.dto.ComentarioRequest;
+import br.com.sistemas.chamados.dto.TecnicoRequest;
+import jakarta.validation.Validator;
+
 import br.com.sistemas.chamados.entity.Categoria;
 import br.com.sistemas.chamados.entity.Chamado;
 import br.com.sistemas.chamados.entity.Cliente;
@@ -40,68 +47,36 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private ComentarioRepository comentarioRepository;
 
+    @Autowired
+    private Validator validator;
+
     @Override
     public void run(String... args) throws Exception {
-        Categoria cat1 = new Categoria();
-        cat1.setNome("Hardware");
-        cat1.setDescricao("Problemas com equipamentos físicos");
-
-        Categoria cat2 = new Categoria();
-        cat2.setNome("Redes");
-        cat2.setDescricao("Problemas de conexão e internet");
-
-        Categoria cat3 = new Categoria();
-        cat3.setNome("Software");
-        cat3.setDescricao("Problemas com sistemas e aplicativos");
+        Categoria cat1 = categoria("Hardware", "Problemas com equipamentos físicos");
+        Categoria cat2 = categoria("Redes", "Problemas de conexão e internet");
+        Categoria cat3 = categoria("Software", "Problemas com sistemas e aplicativos");
         
         categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
 
-        Cliente cli1 = new Cliente();
-        cli1.setNome("Empresa Para-Chamados");
-        cli1.setEmail("email@pc.com");
-        cli1.setTelefone("47999999999");
-
-        Cliente cli2 = new Cliente();
-        cli2.setNome("Loja de Jogos");
-        cli2.setEmail("jogos@loja.com");
-        cli2.setTelefone("4799999999");
+        // Telefones são guardados só com dígitos (DDD + número); a máscara é aplicada na tela.
+        Cliente cli1 = cliente("Empresa Para-Chamados", "email@pc.com", "(47) 99999-9999");
+        Cliente cli2 = cliente("Loja de Jogos", "jogos@loja.com", "(47) 3322-1100");
         
         clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 
-        Tecnico tec1 = new Tecnico();
-        tec1.setNome("Mateus Tavares");
-        tec1.setEmail("mateus@admin.com");
-        tec1.setPerfil(Perfil.ADMIN);
-
-        Tecnico tec2 = new Tecnico();
-        tec2.setNome("Valeska Ingrid");
-        tec2.setEmail("valeska@tecnico.com");
-        tec2.setPerfil(Perfil.TECNICO);
+        Tecnico tec1 = tecnico("Mateus Tavares", "mateus@admin.com", Perfil.ADMIN);
+        Tecnico tec2 = tecnico("Valeska Ingrid", "valeska@tecnico.com", Perfil.TECNICO);
         
         tecnicoRepository.saveAll(Arrays.asList(tec1, tec2));
 
-        Chamado ch1 = new Chamado();
-        ch1.setTitulo("Computador não liga");
-        ch1.setDescricao("O PC da recepção fez um barulho estranho e desligou.");
-        ch1.setPrioridade(Prioridade.ALTA);
-        ch1.setStatus(StatusChamado.ABERTO);
-        ch1.setDataAbertura(LocalDateTime.now().minusDays(1));
-        ch1.setCliente(cli1);
-        ch1.setCategoria(cat1);
-
-        Chamado ch2 = new Chamado();
-        ch2.setTitulo("Internet lenta");
-        ch2.setDescricao("A conexão está caindo toda a hora!");
-        ch2.setPrioridade(Prioridade.MEDIA);
-        ch2.setStatus(StatusChamado.EM_ATENDIMENTO);
-        ch2.setDataAbertura(LocalDateTime.now().minusHours(5));
-        ch2.setCliente(cli2);
-        ch2.setCategoria(cat2);
-        ch2.setTecnico(tec2);
+        Chamado ch1 = chamado("Computador não liga", "O PC da recepção fez um barulho estranho e desligou.",
+            Prioridade.ALTA, StatusChamado.ABERTO, LocalDateTime.now().minusDays(1), cli1, cat1, null);
+        Chamado ch2 = chamado("Internet lenta", "A conexão está caindo toda a hora!",
+            Prioridade.MEDIA, StatusChamado.EM_ATENDIMENTO, LocalDateTime.now().minusHours(5), cli2, cat2, tec2);
 
         chamadoRepository.saveAll(Arrays.asList(ch1, ch2));
 
-        Comentario com1 = new Comentario("Estou a caminho para verificar o roteador.", tec2.getNome(), ch2);
+        Comentario com1 = comentario("Estou a caminho para verificar o roteador.", tec2.getNome(), ch2);
         comentarioRepository.save(com1);
 
         // ---------- Dados adicionais de demonstração ----------
@@ -121,9 +96,9 @@ public class TestConfig implements CommandLineRunner {
         List<Cliente> novosClientes = clienteRepository.saveAll(Arrays.asList(
             cliente("Padaria Pão Quente", "contato@paoquente.com", "47988887777"),
             cliente("Clínica Vida Saudável", "ti@vidasaudavel.com", "47977776666"),
-            cliente("Escritório Silva & Associados", "suporte@silvaassociados.com", "47966665555"),
+            cliente("Escritório Silva & Associados", "suporte@silvaassociados.com", "(47) 3366-5555"),
             cliente("Tech Solutions Ltda", "chamados@techsolutions.com", "47955554444"),
-            cliente("Escola Aprender Mais", "secretaria@aprendermais.com", "47944443333")));
+            cliente("Escola Aprender Mais", "secretaria@aprendermais.com", null)));
 
         List<Tecnico> novosTecnicos = tecnicoRepository.saveAll(Arrays.asList(
             tecnico("Carlos Eduardo", "carlos@tecnico.com", Perfil.TECNICO),
@@ -166,11 +141,11 @@ public class TestConfig implements CommandLineRunner {
         chamadoRepository.saveAll(Arrays.asList(c3, c4, c5, c6, c7, c8, c9, c10, c11, c12));
 
         comentarioRepository.saveAll(Arrays.asList(
-            new Comentario("Verificando os logs do servidor de banco de dados.", ana.getNome(), c3),
-            new Comentario("Aguardando o cliente enviar print do erro.", carlos.getNome(), c5),
-            new Comentario("Antivírus executado, iniciando limpeza dos arquivos infectados.", ana.getNome(), c6),
-            new Comentario("Senha redefinida com sucesso. Chamado encerrado.", carlos.getNome(), c7),
-            new Comentario("Treinamento realizado com toda a equipe.", ana.getNome(), c12)));
+            comentario("Verificando os logs do servidor de banco de dados.", ana.getNome(), c3),
+            comentario("Aguardando o cliente enviar print do erro.", carlos.getNome(), c5),
+            comentario("Antivírus executado, iniciando limpeza dos arquivos infectados.", ana.getNome(), c6),
+            comentario("Senha redefinida com sucesso. Chamado encerrado.", carlos.getNome(), c7),
+            comentario("Treinamento realizado com toda a equipe.", ana.getNome(), c12)));
 
         System.out.println("DADOS DE DEMONSTRAÇÃO CARREGADOS COM SUCESSO!");
         System.out.println("Categorias: " + categoriaRepository.count());
@@ -179,34 +154,50 @@ public class TestConfig implements CommandLineRunner {
         System.out.println("Chamados: " + chamadoRepository.count());
     }
 
+    /* Os dados de demonstração passam pelas mesmas regras de validação e normalização da API. */
+
     private Categoria categoria(String nome, String descricao) {
+        CategoriaRequest dto = validar(new CategoriaRequest(nome, descricao));
         Categoria c = new Categoria();
-        c.setNome(nome);
-        c.setDescricao(descricao);
+        c.setNome(dto.nome());
+        c.setDescricao(dto.descricao());
         return c;
     }
 
     private Cliente cliente(String nome, String email, String telefone) {
-        Cliente c = new Cliente();
-        c.setNome(nome);
-        c.setEmail(email);
-        c.setTelefone(telefone);
-        return c;
+        ClienteRequest dto = validar(new ClienteRequest(nome, email, telefone));
+        return new Cliente(dto.nome(), dto.email(), dto.telefone());
     }
 
     private Tecnico tecnico(String nome, String email, Perfil perfil) {
+        TecnicoRequest dto = validar(new TecnicoRequest(nome, email, perfil));
         Tecnico t = new Tecnico();
-        t.setNome(nome);
-        t.setEmail(email);
-        t.setPerfil(perfil);
+        t.setNome(dto.nome());
+        t.setEmail(dto.email());
+        t.setPerfil(dto.perfil());
         return t;
+    }
+
+    private Comentario comentario(String texto, String autor, Chamado chamado) {
+        ComentarioRequest dto = validar(new ComentarioRequest(texto, autor));
+        return new Comentario(dto.texto(), dto.autor(), chamado);
+    }
+
+    private <T> T validar(T dto) {
+        var erros = validator.validate(dto);
+        if (!erros.isEmpty()) {
+            throw new IllegalStateException("Dado de demonstração inválido: " + dto + " -> "
+                + erros.stream().map(e -> e.getMessage()).toList());
+        }
+        return dto;
     }
 
     private Chamado chamado(String titulo, String descricao, Prioridade prioridade, StatusChamado status,
                             LocalDateTime dataAbertura, Cliente cliente, Categoria categoria, Tecnico tecnico) {
+        ChamadoRequest dto = validar(new ChamadoRequest(titulo, descricao, prioridade, 1L, 1L));
         Chamado c = new Chamado();
-        c.setTitulo(titulo);
-        c.setDescricao(descricao);
+        c.setTitulo(dto.titulo());
+        c.setDescricao(dto.descricao());
         c.setPrioridade(prioridade);
         c.setStatus(status);
         c.setDataAbertura(dataAbertura);
